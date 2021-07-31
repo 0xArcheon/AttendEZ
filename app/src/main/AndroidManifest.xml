@@ -9,22 +9,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name="com.amlan.attendez.Reports_Detail_Activity"
-            android:theme="@style/AppTheme2" />
-        <activity android:name="com.amlan.attendez.Reports_Activity" />
-        <activity
-            android:name="com.amlan.attendez.ClassDetail_Activity"
-            android:theme="@style/FullScreenTheme" />
-        <activity
-            android:name="com.amlan.attendez.Insert_class_Activity"
-            android:theme="@style/AppTheme2" />
-        <activity android:name="com.amlan.attendez.MainActivity">
+        <activity android:name=".SignupActivity">
+        </activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Reports_Detail_Activity"
+            android:theme="@style/AppTheme2" />
+        <activity android:name=".Reports_Activity" />
+        <activity
+            android:name=".ClassDetail_Activity"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".Insert_class_Activity"
+            android:theme="@style/AppTheme2" />
+        <activity android:name=".ClassActivity">
+
         </activity>
     </application>
 
