@@ -18,7 +18,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="8dp"
-        android:text="Welcome\nBack"
+        android:text="Create\nAccount"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -33,13 +33,14 @@
         android:orientation="vertical"
         android:gravity="bottom">
         <EditText
+            android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:backgroundTint="@android:color/transparent"
             android:hint="Name"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:padding="15dp"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white" />
@@ -52,6 +53,7 @@
             android:layout_marginEnd="30dp"
             android:background="#B1B1B1" />
         <EditText
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -71,13 +73,14 @@
             android:layout_marginEnd="30dp"
             android:background="#B1B1B1" />
         <EditText
+            android:id="@+id/etPword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:backgroundTint="@android:color/transparent"
             android:hint="Password"
-            android:inputType="textEmailAddress"
+            android:inputType="textPassword"
             android:padding="15dp"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white" />
@@ -92,10 +95,46 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            >
+            <RadioGroup
+                android:id="@+id/RGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <RadioButton
+                    android:id="@+id/radioStudent"
+                    android:shadowColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Student"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="15dp"
+                    android:onClick="checkButton"
+                    android:checked="true"
+                    />
+                <RadioButton
+                    android:id="@+id/radioTeacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teacher"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:onClick="checkButton"
+                    />
+            </RadioGroup>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabProceed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -131,6 +170,7 @@
             android:layout_marginTop="20dp">
 
             <TextView
+                android:id="@+id/tvSignin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
