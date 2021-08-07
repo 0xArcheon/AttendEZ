@@ -39,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         fabLogin = findViewById(R.id.fabLogin);
         mAuth = FirebaseAuth.getInstance();
 
+        if (mAuth.getCurrentUser() != null) {
+            Intent i = new Intent(MainActivity.this, ClassActivity.class);
+            startActivity(i);
+            finish();
+        }
+
         fabLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,5 +1,6 @@
 package com.amlan.attendez;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,13 +10,19 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amlan.attendez.Adapter.ClassListAdapter;
 import com.amlan.attendez.realm.Class_Names;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -26,7 +33,7 @@ public class ClassActivity extends AppCompatActivity {
     FloatingActionButton fab_main;
     RecyclerView recyclerView;
     TextView sample;
-
+    ImageView ivLogout;
     ClassListAdapter mAdapter;
 
     Realm realm;
@@ -39,9 +46,19 @@ public class ClassActivity extends AppCompatActivity {
         Realm.init(this);
 
         getWindow().setEnterTransition(null);
-
+        ivLogout = findViewById(R.id.ivLogout);
         bottomAppBar = findViewById(R.id.bottomAppBar);
         fab_main = findViewById(R.id.fab_main);
+
+        ivLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(ClassActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         fab_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +74,6 @@ public class ClassActivity extends AppCompatActivity {
         results = realm.where(Class_Names.class)
                 .findAll();
 
-
         sample = findViewById(R.id.classes_sample);
         recyclerView = findViewById(R.id.recyclerView_main);
 
@@ -66,9 +82,8 @@ public class ClassActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
-        mAdapter = new ClassListAdapter( results, ClassActivity.this);
+        mAdapter = new ClassListAdapter(results, ClassActivity.this);
         recyclerView.setAdapter(mAdapter);
-
 
     }
 

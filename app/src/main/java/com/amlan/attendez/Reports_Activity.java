@@ -5,12 +5,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.amlan.attendez.Adapter.ReportsAdapter;
 import com.amlan.attendez.realm.Attendance_Reports;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
@@ -22,7 +25,6 @@ public class Reports_Activity extends AppCompatActivity {
     String subjectName, className, room_ID;
     RecyclerView recyclerView;
     Realm realm;
-
     ReportsAdapter mAdapter;
 
     @Override
@@ -60,19 +62,4 @@ public class Reports_Activity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.only_dot, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home)
-        {
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

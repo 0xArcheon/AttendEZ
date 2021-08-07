@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/more"
-        android:title="Send Feedback"
+        android:icon="@drawable/logoutbtn"
+        android:title="Log out"
         android:contentDescription="more"
         android:iconTint="@color/text_color_dark"
         app:showAsAction="never"
         />
+
 </menu>
