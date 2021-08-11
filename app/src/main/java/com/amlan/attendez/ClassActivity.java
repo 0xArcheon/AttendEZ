@@ -44,7 +44,8 @@ public class ClassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
         Realm.init(this);
-
+        getWindow().setStatusBarColor(getResources().getColor(R.color.aqua));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.aqua));
         getWindow().setEnterTransition(null);
         ivLogout = findViewById(R.id.ivLogout);
         bottomAppBar = findViewById(R.id.bottomAppBar);

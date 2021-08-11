@@ -17,11 +17,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amlan.attendez.Firebase.UserHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class SignupActivity extends AppCompatActivity {
     private FloatingActionButton fabProceed;
     private TextView tvSignin;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -47,6 +51,7 @@ public class SignupActivity extends AppCompatActivity {
         RGroup = findViewById(R.id.RGroup);
         fabProceed = findViewById(R.id.fabProceed);
         tvSignin = findViewById(R.id.tvSignin);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -106,6 +111,7 @@ public class SignupActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(SignupActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
+                            storeUserData();
                         } else {
                             Toast.makeText(SignupActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
                         }
@@ -114,6 +120,19 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void storeUserData() {
+        int radioId = RGroup.getCheckedRadioButtonId();
+        radioButton = findViewById(radioId);
+        String name = etName.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String password = etPword.getText().toString().trim();
+        String userType = radioButton.getText().toString().trim();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
+
+        UserHelper userHelper = new UserHelper(name, email, password,userType);
+        mDatabase.push().setValue(userHelper);
     }
 
     public void checkButton(View v) {
