@@ -1,5 +1,6 @@
 package com.amlan.attendez;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -12,8 +13,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.amlan.attendez.realm.Class_Names;
+import com.amlan.attendez.Firebase.Class_Names;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
 import java.util.Objects;
 
 import co.ceryle.radiorealbutton.library.RadioRealButton;
@@ -30,7 +41,9 @@ public class Insert_class_Activity extends AppCompatActivity {
     Realm realm;
     RealmAsyncTask transaction;
 
-    private  String position_bg = "0";
+    private DatabaseReference mDatabase;
+
+    public String position_bg = "0";
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -46,8 +59,10 @@ public class Insert_class_Activity extends AppCompatActivity {
         _className = findViewById(R.id.className_createClass);
         _subjectName = findViewById(R.id.subjectName_createClass);
 
-        Realm.init(this);
-        realm = Realm.getDefaultInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+       /* Realm.init(this);
+        realm = Realm.getDefaultInstance(); */
 
         final RadioRealButton button1 = (RadioRealButton) findViewById(R.id.button1);
         final RadioRealButton button2 = (RadioRealButton) findViewById(R.id.button2);
@@ -69,11 +84,8 @@ public class Insert_class_Activity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (isValid()) {
-
-                    final ProgressDialog progressDialog = new ProgressDialog(Insert_class_Activity.this);
-                    progressDialog.setMessage("Creating class..");
-                    progressDialog.show();
-
+                    storeClass();
+                    /*
                     transaction = realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -97,28 +109,46 @@ public class Insert_class_Activity extends AppCompatActivity {
                             progressDialog.dismiss();
                             Toast.makeText(Insert_class_Activity.this, "Error!", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }else{
+                    });  */
+                } else {
                     Toast.makeText(Insert_class_Activity.this, "Fill all details", Toast.LENGTH_SHORT).show();
                 }
-
-                //-------
-
             }
-        });
 
+        });
 
     }
 
-    public boolean isValid(){
+    public void storeClass() {
+        final ProgressDialog progressDialog = new ProgressDialog(Insert_class_Activity.this);
+        progressDialog.setMessage("Creating class..");
+        progressDialog.show();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String id = user.getUid();
+        String name_class = _className.getText().toString().trim();
+        String name_subject = _subjectName.getText().toString().trim();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Class_Names class_names = new Class_Names(id, name_class, name_subject, position_bg);
+        mDatabase.child("Class Names").push().setValue(class_names).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(Insert_class_Activity.this, "Class Successfully Created", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                finish();
+            }
+        });
+    }
+
+    public boolean isValid() {
 
         return !_className.getText().toString().isEmpty() && !_subjectName.getText().toString().isEmpty();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home)
-        {
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
 

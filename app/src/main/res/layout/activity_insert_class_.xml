@@ -107,6 +107,7 @@
             app:rrb_ripple="true"
             app:rrb_rippleColor="@color/black"
             />
+
         <co.ceryle.radiorealbutton.library.RadioRealButton
             android:id="@+id/button4"
             android:layout_width="wrap_content"
@@ -115,8 +116,7 @@
             app:rrb_imageHeight="36dp"
             app:rrb_imageWidth="36dp"
             app:rrb_ripple="true"
-            app:rrb_rippleColor="@color/black"
-            />
+            app:rrb_rippleColor="@color/black" />
         <co.ceryle.radiorealbutton.library.RadioRealButton
             android:id="@+id/button5"
             android:layout_width="wrap_content"
