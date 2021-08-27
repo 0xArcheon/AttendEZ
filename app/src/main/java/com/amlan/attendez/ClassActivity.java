@@ -3,6 +3,7 @@ package com.amlan.attendez;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -19,10 +20,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amlan.attendez.Adapter.ClassListAdapter;
-import com.amlan.attendez.realm.Class_Names;
+import com.amlan.attendez.Firebase.Class_Names;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -35,21 +45,25 @@ public class ClassActivity extends AppCompatActivity {
     TextView sample;
     ImageView ivLogout;
     ClassListAdapter mAdapter;
+    DatabaseReference mDatabase;
+    ArrayList<com.amlan.attendez.Firebase.Class_Names> mList;
 
-    Realm realm;
+    //Realm realm;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
-        Realm.init(this);
+        // Realm.init(this);
         getWindow().setStatusBarColor(getResources().getColor(R.color.aqua));
         getWindow().setNavigationBarColor(getResources().getColor(R.color.aqua));
         getWindow().setEnterTransition(null);
         ivLogout = findViewById(R.id.ivLogout);
         bottomAppBar = findViewById(R.id.bottomAppBar);
         fab_main = findViewById(R.id.fab_main);
+        recyclerView = findViewById(R.id.recyclerView_main);
+        sample = findViewById(R.id.classes_sample);
 
         ivLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,8 +81,40 @@ public class ClassActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Class Names");
+        Query query = FirebaseDatabase.getInstance().getReference("Class Names")
+                .orderByChild("id").equalTo(userId);
 
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+
+        mList = new ArrayList<>();
+        mAdapter = new ClassListAdapter(mList, this);
+        recyclerView.setAdapter(mAdapter);
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    Class_Names class_names = dataSnapshot.getValue(Class_Names.class);
+                    mList.add(class_names);
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        /*
         realm = Realm.getDefaultInstance();
+
 
         RealmResults<Class_Names> results;
 
@@ -86,12 +132,7 @@ public class ClassActivity extends AppCompatActivity {
         mAdapter = new ClassListAdapter(results, ClassActivity.this);
         recyclerView.setAdapter(mAdapter);
 
-    }
+    } */
 
-    @Override
-    protected void onResume() {
-        realm.refresh();
-        realm.setAutoRefresh(true);
-        super.onResume();
     }
 }
