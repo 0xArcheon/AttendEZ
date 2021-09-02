@@ -20,7 +20,7 @@ import com.amlan.attendez.realm.Class_Names;
 import io.realm.RealmResults;
 
 import static androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation;
-
+/*
 public class ViewHolder extends RecyclerView.ViewHolder {
 
     public final TextView class_name;
@@ -66,3 +66,5 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
 }
+
+ */
