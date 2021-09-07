@@ -137,6 +137,7 @@ public class Insert_class_Activity extends AppCompatActivity {
                 Toast.makeText(Insert_class_Activity.this, "Class Successfully Created", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 finish();
+                String key = mDatabase.getKey();
             }
         });
     }
