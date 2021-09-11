@@ -185,11 +185,11 @@
                 android:textSize="18dp"
                 />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="12dp" />
 
             <Button
                 android:id="@+id/submit_attendance_btn"

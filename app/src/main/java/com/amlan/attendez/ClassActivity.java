@@ -97,6 +97,7 @@ public class ClassActivity extends AppCompatActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mList.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren())
                 {
                     Class_Names class_names = dataSnapshot.getValue(Class_Names.class);

@@ -33,7 +33,8 @@ import android.widget.Toast;
 import com.amlan.attendez.Adapter.StudentsListAdapter;
 import com.amlan.attendez.Firebase.Attendance_Reports;
 import com.amlan.attendez.Firebase.Attendance_Students_List;
-import com.amlan.attendez.realm.Students_List;
+import com.amlan.attendez.Firebase.Class_Names;
+import com.amlan.attendez.Firebase.Students_List;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -73,14 +74,15 @@ public class ClassDetail_Activity extends AppCompatActivity {
     private EditText student_name, reg_no, mobile_no;
     private LinearLayout layout_attendance_taken;
     private RecyclerView mRecyclerview;
+    ArrayList<com.amlan.attendez.Firebase.Students_List> students;
 
     String room_ID, subject_Name, class_Name;
 
     public static final String TAG = "ClassDetail_Activity";
 
-    Realm realm;
+    /*Realm realm;
     RealmAsyncTask transaction;
-    RealmChangeListener realmChangeListener;
+    RealmChangeListener realmChangeListener; */
 
     DatabaseReference mDatabase;
 
@@ -98,7 +100,8 @@ public class ClassDetail_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_class_detail_);
 
         getWindow().setExitTransition(null);
-        Realm.init(this);
+        //Realm.init(this);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         final String theme = getIntent().getStringExtra("theme");
         class_Name = getIntent().getStringExtra("className");
@@ -127,6 +130,7 @@ public class ClassDetail_Activity extends AppCompatActivity {
         place_holder.setVisibility(View.GONE);
         submit_btn = findViewById(R.id.submit_attendance_btn);
         submit_btn.setVisibility(View.GONE);
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
         switch (theme) {
             case "0":
@@ -156,7 +160,7 @@ public class ClassDetail_Activity extends AppCompatActivity {
 
         //---------------------------------
 
-        Runnable r = new Runnable() {
+       Runnable r = new Runnable() {
             @Override
             public void run() {
                 //RealmInit();
@@ -172,20 +176,35 @@ public class ClassDetail_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                long count = realm.where(Students_List.class)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                Query countQ = mDatabase.child("Students").orderByChild("class_id").equalTo(room_ID);
+                countQ.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot ss : snapshot.getChildren())
+                        {
+                            long count = ss.getChildrenCount();
+                            final String size, size2;
+                            final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ClassDetail_Activity.this);
+                            size = String.valueOf(preferences.getAll().size());
+                            size2 = String.valueOf(count);
+
+                            if (size.equals(size2)) {
+                                submitAttendance();
+                            } else {
+                                Toast.makeText(ClassDetail_Activity.this, "Select all........", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                /*long count = realm.where(Students_List.class)
                         .equalTo("class_id", room_ID)
-                        .count();
-                final String size, size2;
-                final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ClassDetail_Activity.this);
-                size = String.valueOf(preferences.getAll().size());
-                size2 = String.valueOf(count);
-
-                if (size.equals(size2)) {
-                    submitAttendance();
-                } else {
-                    Toast.makeText(ClassDetail_Activity.this, "Select all........", Toast.LENGTH_SHORT).show();
-                }
-
+                        .count(); */
             }
         });
 
@@ -254,8 +273,8 @@ public class ClassDetail_Activity extends AppCompatActivity {
     }
     public void FirebaseInit()
     {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         Query countQuery = mDatabase.child("Students").orderByChild("class_id").equalTo(room_ID);
         final String date = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(new Date());
         countQuery.addValueEventListener(new ValueEventListener() {
@@ -305,16 +324,22 @@ public class ClassDetail_Activity extends AppCompatActivity {
             }
         });
 
-        final ArrayList<com.amlan.attendez.Firebase.Students_List> students = new ArrayList<>();
-        Query studentsQuery = mDatabase.child("Students").orderByChild("class_id").equalTo(room_ID);
-        studentsQuery.addValueEventListener(new ValueEventListener() {
+        students = new ArrayList<>();
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        String extraClick = "";
+        mAdapter = new StudentsListAdapter(students, ClassDetail_Activity.this, date + room_ID, extraClick);
+        mRecyclerview.setAdapter(mAdapter);
+
+        Query mQuery = mDatabase.child("Students").orderByChild("class_id").equalTo(room_ID);
+        mQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ss : snapshot.getChildren())
-                {
-                    com.amlan.attendez.Firebase.Students_List list = snapshot.getValue(com.amlan.attendez.Firebase.Students_List.class);
+                students.clear();
+                for ( DataSnapshot ds : snapshot.getChildren()){
+                    Students_List list = ds.getValue(Students_List.class);
                     students.add(list);
                 }
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -322,10 +347,6 @@ public class ClassDetail_Activity extends AppCompatActivity {
 
             }
         });
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        String extraClick = "";
-        mAdapter = new StudentsListAdapter(students, ClassDetail_Activity.this, date + room_ID, extraClick);
-        mRecyclerview.setAdapter(mAdapter);
 
     }
 /*

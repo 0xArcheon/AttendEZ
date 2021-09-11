@@ -14,7 +14,10 @@ import android.widget.Toast;
 import com.amlan.attendez.Adapter.ReportsAdapter;
 import com.amlan.attendez.realm.Attendance_Reports;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import io.realm.Realm;
@@ -25,13 +28,15 @@ public class Reports_Activity extends AppCompatActivity {
     String subjectName, className, room_ID;
     RecyclerView recyclerView;
     Realm realm;
+    DatabaseReference mDatabase;
     ReportsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
-        Realm.init(this);
+        //Realm.init(this);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         subjectName = getIntent().getStringExtra("subject_name");
         className = getIntent().getStringExtra("class_name");
         room_ID = getIntent().getStringExtra("room_ID");
@@ -43,8 +48,7 @@ public class Reports_Activity extends AppCompatActivity {
         toolbar.setTitle(subjectName);
         toolbar.setSubtitle(className);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
-
+        
         RealmResults<Attendance_Reports> results;
         realm = Realm.getDefaultInstance();
         results = realm.where(Attendance_Reports.class)

@@ -36,7 +36,7 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 public class StudentsListAdapter extends RecyclerView.Adapter<StudentsListAdapter.MyViewHolder>{
-    ArrayList<Students_List> mList;
+    ArrayList<com.amlan.attendez.Firebase.Students_List> mList;
     private Activity mActivity;
     String stuID, mroomID;
 
@@ -50,13 +50,13 @@ public class StudentsListAdapter extends RecyclerView.Adapter<StudentsListAdapte
 
     @NonNull
     @Override
-    public StudentsListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.student_attendance_adapter, parent, false);
         return new MyViewHolder(itemView, mActivity, mList, mroomID);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StudentsListAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Students_List temp = mList.get(position);
         holder.student_name.setText(temp.getName_student());
         holder.student_regNo.setText(temp.getRegNo_student());
@@ -78,7 +78,7 @@ public class StudentsListAdapter extends RecyclerView.Adapter<StudentsListAdapte
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mList.size();
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         public Activity mActivity;
