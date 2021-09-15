@@ -12,7 +12,7 @@ import com.amlan.attendez.R;
 import com.amlan.attendez.realm.Attendance_Students_List;
 
 import io.realm.RealmResults;
-
+/*
 public class ViewHolder_reports_detail extends RecyclerView.ViewHolder {
 
     public TextView namE;
@@ -38,4 +38,4 @@ public class ViewHolder_reports_detail extends RecyclerView.ViewHolder {
 
     }
 
-}
+} */

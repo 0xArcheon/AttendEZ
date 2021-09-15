@@ -189,11 +189,8 @@ public class ClassDetail_Activity extends AppCompatActivity {
                             size = String.valueOf(preferences.getAll().size());
                             size2 = String.valueOf(count);
 
-                            if (size.equals(size2)) {
                                 submitAttendance();
-                            } else {
-                                Toast.makeText(ClassDetail_Activity.this, "Select all........", Toast.LENGTH_SHORT).show();
-                            }
+
                         }
                     }
 
@@ -437,14 +434,14 @@ public class ClassDetail_Activity extends AppCompatActivity {
         final String date = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(new Date());
         //final RealmResults<Attendance_Students_List> list_students;
         final ArrayList<Attendance_Students_List> list = new ArrayList<>();
-        Query q = mDatabase.child("Attendance Students List").orderByChild("date_and_classID").equalTo(date +room_ID);
+        Query q = mDatabase.child("Attendance List").orderByChild("date_and_classID").equalTo(date +room_ID);
         q.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot s : snapshot.getChildren())
                 {
                     Attendance_Students_List list_students = snapshot.getValue(Attendance_Students_List.class);
-                    list.addAll((Collection<? extends Attendance_Students_List>) list_students);
+                    list.add(list_students);
                 }
             }
 
@@ -466,7 +463,6 @@ public class ClassDetail_Activity extends AppCompatActivity {
         final String dateOnly = String.valueOf(calendar.get(Calendar.DATE));
         @SuppressLint("SimpleDateFormat") final String monthOnly = new SimpleDateFormat("MMM").format(calendar.getTime());
 
-        try {
             Attendance_Reports attendance_reports = new Attendance_Reports();
             attendance_reports.setClassId(room_ID);
             attendance_reports.setAttendance_students_lists(list);
@@ -507,12 +503,11 @@ public class ClassDetail_Activity extends AppCompatActivity {
             Toast.makeText(ClassDetail_Activity.this, "Attendance Submitted", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
 
-
-        } catch (Exception e) {
+        /* catch (Exception e) {
             e.printStackTrace();
             progressDialog.dismiss();
             Toast.makeText(ClassDetail_Activity.this, "Error Occurred", Toast.LENGTH_SHORT).show();
-        }
+        } */
 
 
     }

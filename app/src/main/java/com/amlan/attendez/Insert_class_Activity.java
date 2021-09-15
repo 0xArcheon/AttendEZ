@@ -38,9 +38,6 @@ public class Insert_class_Activity extends AppCompatActivity {
     EditText _className;
     EditText _subjectName;
 
-    Realm realm;
-    RealmAsyncTask transaction;
-
     private DatabaseReference mDatabase;
 
     public String position_bg = "0";

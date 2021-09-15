@@ -15,7 +15,7 @@ import com.amlan.attendez.realm.Attendance_Reports;
 import io.realm.RealmResults;
 
 import static androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation;
-
+/*
 public class ViewHolder_reports extends RecyclerView.ViewHolder {
 
 
@@ -49,4 +49,4 @@ public class ViewHolder_reports extends RecyclerView.ViewHolder {
 
     }
 
-}
+} */

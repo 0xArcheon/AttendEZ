@@ -1,5 +1,6 @@
 package com.amlan.attendez;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,10 +13,15 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.amlan.attendez.Adapter.ReportsAdapter;
-import com.amlan.attendez.realm.Attendance_Reports;
+import com.amlan.attendez.Firebase.Attendance_Reports;
+import com.amlan.attendez.Firebase.Students_List;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,7 +33,6 @@ public class Reports_Activity extends AppCompatActivity {
 
     String subjectName, className, room_ID;
     RecyclerView recyclerView;
-    Realm realm;
     DatabaseReference mDatabase;
     ReportsAdapter mAdapter;
 
@@ -48,20 +53,37 @@ public class Reports_Activity extends AppCompatActivity {
         toolbar.setTitle(subjectName);
         toolbar.setSubtitle(className);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        
-        RealmResults<Attendance_Reports> results;
+
+        final ArrayList<com.amlan.attendez.Firebase.Attendance_Reports> results = new ArrayList<>();
+        /* RealmResults<Attendance_Reports> results;
         realm = Realm.getDefaultInstance();
         results = realm.where(Attendance_Reports.class)
                 .equalTo("classId", room_ID)
-                .findAll();
+                .findAll(); */
+        String userId =FirebaseAuth.getInstance().getUid();
+        Query query = mDatabase.child("Attendance Reports").orderByChild("classId").equalTo(room_ID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren())
+                {
+                    Attendance_Reports reports = ds.getValue(Attendance_Reports.class);
+                    results.add(reports);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
 
         recyclerView.setLayoutManager(gridLayoutManager);
-
-        mAdapter = new ReportsAdapter( results,Reports_Activity.this, room_ID);
+        mAdapter = new ReportsAdapter(Reports_Activity.this, results, room_ID);
         recyclerView.setAdapter(mAdapter);
 
     }

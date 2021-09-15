@@ -1,5 +1,6 @@
 package com.amlan.attendez;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,13 +12,19 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.amlan.attendez.Adapter.Reports_Detail_Adapter;
-import com.amlan.attendez.realm.Attendance_Students_List;
+import com.amlan.attendez.Firebase.Attendance_Students_List;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 public class Reports_Detail_Activity extends AppCompatActivity {
 
@@ -26,13 +33,15 @@ public class Reports_Detail_Activity extends AppCompatActivity {
 
     TextView subj, className, toolbar_title;
 
-    Realm realm;
+    DatabaseReference mDatabase;
+
+    //Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports__detail);
-        Realm.init(this);
-        realm = Realm.getDefaultInstance();
+        //Realm.init(this);
+        //realm = Realm.getDefaultInstance();
 
         String room_ID = getIntent().getStringExtra("ID");
         String classname = getIntent().getStringExtra("class");
@@ -51,18 +60,37 @@ public class Reports_Detail_Activity extends AppCompatActivity {
         subj.setText(subjName);
         className.setText(classname);
 
+        ArrayList<Attendance_Students_List> list = new ArrayList<>();
+        String userID = FirebaseAuth.getInstance().getUid();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Query query = mDatabase.child("Attendance List").orderByChild("classID").equalTo(userID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren())
+                {
+                    com.amlan.attendez.Firebase.Attendance_Students_List students_list = ds.getValue(com.amlan.attendez.Firebase.Attendance_Students_List.class);
+                    list.add(students_list);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
-        RealmResults<Attendance_Students_List> list = realm.where(Attendance_Students_List.class)
+        /* RealmResults<Attendance_Students_List> list = realm.where(Attendance_Students_List.class)
                             .equalTo("date_and_classID", room_ID)
                             .sort("studentName", Sort.ASCENDING)
-                            .findAllAsync();
+                            .findAllAsync(); */
 
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mAdapter = new Reports_Detail_Adapter( list,Reports_Detail_Activity.this, room_ID);
+        mAdapter = new Reports_Detail_Adapter(Reports_Detail_Activity.this, list, room_ID);
+        //mAdapter = new Reports_Detail_Adapter( list,Reports_Detail_Activity.this, room_ID);
         recyclerView.setAdapter(mAdapter);
 
     }
