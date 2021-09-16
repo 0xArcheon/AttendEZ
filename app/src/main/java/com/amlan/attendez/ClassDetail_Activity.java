@@ -163,7 +163,6 @@ public class ClassDetail_Activity extends AppCompatActivity {
        Runnable r = new Runnable() {
             @Override
             public void run() {
-                //RealmInit();
                 FirebaseInit();
                 progressBar.setVisibility(View.GONE);
             }
@@ -297,7 +296,7 @@ public class ClassDetail_Activity extends AppCompatActivity {
 
             }
         });
-        Query reportSizeQuery = mDatabase.orderByChild("date_and_classID").equalTo(date + room_ID);
+        Query reportSizeQuery = mDatabase.child("Attendance Reports").orderByChild("date_and_classID").equalTo(date + room_ID);
         reportSizeQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -432,9 +431,8 @@ public class ClassDetail_Activity extends AppCompatActivity {
         progressDialog.setMessage("Please wait..");
         progressDialog.show();
         final String date = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(new Date());
-        //final RealmResults<Attendance_Students_List> list_students;
         final ArrayList<Attendance_Students_List> list = new ArrayList<>();
-        Query q = mDatabase.child("Attendance List").orderByChild("date_and_classID").equalTo(date +room_ID);
+        Query q = mDatabase.child("Attendance Students List").orderByChild("date_and_classID").equalTo(date +room_ID);
         q.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -535,7 +533,7 @@ public class ClassDetail_Activity extends AppCompatActivity {
         String name_student = student_name.getText().toString().trim();
         String regNo_student = reg_no.getText().toString().trim();
         String mobileNo_student = mobile_no.getText().toString().trim();
-        String class_id = userId;
+        String class_id = userId+class_Name;
         final ProgressDialog progressDialog = new ProgressDialog(ClassDetail_Activity.this);
         progressDialog.setMessage("Creating class..");
         progressDialog.show();

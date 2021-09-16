@@ -83,9 +83,9 @@ public class ClassActivity extends AppCompatActivity {
         });
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
-        mDatabase = FirebaseDatabase.getInstance().getReference("Class Names");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         Query query = FirebaseDatabase.getInstance().getReference("Class Names")
-                .orderByChild("id").equalTo(userId);
+                .orderByChild("ownerId").equalTo(userId);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));

@@ -122,12 +122,13 @@ public class Insert_class_Activity extends AppCompatActivity {
         progressDialog.show();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String id = user.getUid();
+        String ownerId = user.getUid(); //classroom creator id
+        String crId = ownerId+_className.getText().toString().trim();
         String name_class = _className.getText().toString().trim();
         String name_subject = _subjectName.getText().toString().trim();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        Class_Names class_names = new Class_Names(id, name_class, name_subject, position_bg);
+        Class_Names class_names = new Class_Names(ownerId, crId, name_class, name_subject, position_bg);
         mDatabase.child("Class Names").push().setValue(class_names).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

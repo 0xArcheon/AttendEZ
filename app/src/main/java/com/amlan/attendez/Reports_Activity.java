@@ -65,6 +65,7 @@ public class Reports_Activity extends AppCompatActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                results.clear();
                 for (DataSnapshot ds : snapshot.getChildren())
                 {
                     Attendance_Reports reports = ds.getValue(Attendance_Reports.class);

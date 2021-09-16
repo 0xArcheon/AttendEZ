@@ -125,7 +125,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.MyVi
                     intent.putExtra("theme", mList.get(getAdapterPosition()).getPosition_bg());
                     intent.putExtra("className", mList.get(getAdapterPosition()).getName_class());
                     intent.putExtra("subjectName", mList.get(getAdapterPosition()).getName_subject());
-                    intent.putExtra("classroom_ID", mList.get(getAdapterPosition()).getId());
+                    intent.putExtra("classroom_ID", mList.get(getAdapterPosition()).getCrId());
                     Pair<View, String> p1 = Pair.create((View) cardView, "ExampleTransition");
                     ActivityOptionsCompat optionsCompat = makeSceneTransitionAnimation(mActivity, p1);
                     view.getContext().startActivity(intent, optionsCompat.toBundle());

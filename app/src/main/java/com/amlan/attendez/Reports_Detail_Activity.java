@@ -34,6 +34,7 @@ public class Reports_Detail_Activity extends AppCompatActivity {
     TextView subj, className, toolbar_title;
 
     DatabaseReference mDatabase;
+    ArrayList<Attendance_Students_List> list;
 
     //Realm realm;
     @Override
@@ -60,13 +61,14 @@ public class Reports_Detail_Activity extends AppCompatActivity {
         subj.setText(subjName);
         className.setText(classname);
 
-        ArrayList<Attendance_Students_List> list = new ArrayList<>();
+        list = new ArrayList<>();
         String userID = FirebaseAuth.getInstance().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        Query query = mDatabase.child("Attendance List").orderByChild("classID").equalTo(userID);
+        Query query = mDatabase.child("Attendance Students List").orderByChild("date_and_classID").equalTo(room_ID);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                list.clear();
                 for(DataSnapshot ds : snapshot.getChildren())
                 {
                     com.amlan.attendez.Firebase.Attendance_Students_List students_list = ds.getValue(com.amlan.attendez.Firebase.Attendance_Students_List.class);
@@ -76,7 +78,7 @@ public class Reports_Detail_Activity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                    mAdapter.notifyDataSetChanged();
             }
         });
 

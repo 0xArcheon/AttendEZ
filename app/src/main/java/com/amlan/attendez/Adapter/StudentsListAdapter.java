@@ -30,7 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
@@ -137,15 +140,16 @@ public class StudentsListAdapter extends RecyclerView.Adapter<StudentsListAdapte
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(mList.get(getAbsoluteAdapterPosition()).getRegNo_student(), attendance);
                     editor.apply();
+                    final String date = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(new Date());
 
-                    mDatabase = FirebaseDatabase.getInstance().getReference("Attendance List");
+                    mDatabase = FirebaseDatabase.getInstance().getReference("Attendance Students List");
                     final com.amlan.attendez.Firebase.Attendance_Students_List attendance_students_list = new com.amlan.attendez.Firebase.Attendance_Students_List();
                     attendance_students_list.setStudentName((mList.get(getAbsoluteAdapterPosition()).getName_student()));
                     attendance_students_list.setAttendance(attendance);
                     attendance_students_list.setMobNo((mList.get(getAbsoluteAdapterPosition()).getMobileNo_student()));
                     attendance_students_list.setStudentRegNo(mList.get(getAbsoluteAdapterPosition()).getRegNo_student());
                     attendance_students_list.setClassID(mList.get(getAbsoluteAdapterPosition()).getClass_id());
-                    attendance_students_list.setDate_and_classID(mRoomID);
+                    attendance_students_list.setDate_and_classID(date+mList.get(getAbsoluteAdapterPosition()).getClass_id());
                     attendance_students_list.setUnique_ID(mList.get(getAbsoluteAdapterPosition()).getRegNo_student()+mRoomID);
                     mDatabase.push().setValue(attendance_students_list).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -163,14 +167,15 @@ public class StudentsListAdapter extends RecyclerView.Adapter<StudentsListAdapte
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(mList.get(getAbsoluteAdapterPosition()).getRegNo_student(), attendance);
                     editor.apply();
-                    mDatabase = FirebaseDatabase.getInstance().getReference("Attendance List");
+                    final String date = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(new Date());
+                    mDatabase = FirebaseDatabase.getInstance().getReference("Attendance Students List");
                     final com.amlan.attendez.Firebase.Attendance_Students_List attendance_students_list = new com.amlan.attendez.Firebase.Attendance_Students_List();
                     attendance_students_list.setStudentName((mList.get(getAbsoluteAdapterPosition()).getName_student()));
                     attendance_students_list.setAttendance(attendance);
                     attendance_students_list.setMobNo((mList.get(getAbsoluteAdapterPosition()).getMobileNo_student()));
                     attendance_students_list.setStudentRegNo(mList.get(getAbsoluteAdapterPosition()).getRegNo_student());
                     attendance_students_list.setClassID(mList.get(getAbsoluteAdapterPosition()).getClass_id());
-                    attendance_students_list.setDate_and_classID(mRoomID);
+                    attendance_students_list.setDate_and_classID(date+mList.get(getAbsoluteAdapterPosition()).getClass_id());
                     attendance_students_list.setUnique_ID(mList.get(getAbsoluteAdapterPosition()).getRegNo_student()+mRoomID);
                     mDatabase.push().setValue(attendance_students_list).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
