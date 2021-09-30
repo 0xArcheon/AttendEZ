@@ -11,15 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amlan.attendez.Firebase.Attendance_Reports;
-import com.amlan.attendez.MainActivity;
 import com.amlan.attendez.R;
 import com.amlan.attendez.Reports_Detail_Activity;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
 
 public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHolder> {
 
@@ -81,21 +77,6 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.MyViewHo
 
     }
 }
-/*
-    @NonNull
-    @Override
-    public onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.reports_adapter_item, parent, false);
-        return new ViewHolder_reports(itemView, mActivity, mList);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder_reports holder, int position) {
-        Attendance_Reports temp = getItem(position);
-        holder.month.setText(temp.getMonthOnly());
-        holder.date.setText(temp.getDateOnly());
-
-    } */
 
 
 

@@ -18,19 +18,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.Map;
 import java.util.Objects;
 
 import co.ceryle.radiorealbutton.library.RadioRealButton;
 import co.ceryle.radiorealbutton.library.RadioRealButtonGroup;
-import io.realm.Realm;
-import io.realm.RealmAsyncTask;
 
 public class Insert_class_Activity extends AppCompatActivity {
 
@@ -58,8 +52,6 @@ public class Insert_class_Activity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-       /* Realm.init(this);
-        realm = Realm.getDefaultInstance(); */
 
         final RadioRealButton button1 = (RadioRealButton) findViewById(R.id.button1);
         final RadioRealButton button2 = (RadioRealButton) findViewById(R.id.button2);
@@ -82,31 +74,6 @@ public class Insert_class_Activity extends AppCompatActivity {
 
                 if (isValid()) {
                     storeClass();
-                    /*
-                    transaction = realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            Class_Names class_name = realm.createObject(Class_Names.class);
-                            String id = _className.getText().toString() + _subjectName.getText().toString();
-                            class_name.setId(id);
-                            class_name.setName_class(_className.getText().toString());
-                            class_name.setName_subject(_subjectName.getText().toString());
-                            class_name.setPosition_bg(position_bg);
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            progressDialog.dismiss();
-                            Toast.makeText(Insert_class_Activity.this, "Successfully created", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }, new Realm.Transaction.OnError() {
-                        @Override
-                        public void onError(Throwable error) {
-                            progressDialog.dismiss();
-                            Toast.makeText(Insert_class_Activity.this, "Error!", Toast.LENGTH_SHORT).show();
-                        }
-                    });  */
                 } else {
                     Toast.makeText(Insert_class_Activity.this, "Fill all details", Toast.LENGTH_SHORT).show();
                 }

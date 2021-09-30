@@ -17,12 +17,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amlan.attendez.BottomSheet.Student_Edit_Sheet;
-import com.amlan.attendez.Firebase.Class_Names;
 import com.amlan.attendez.Firebase.Students_List;
 import com.amlan.attendez.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,10 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
 
 public class StudentsListAdapter extends RecyclerView.Adapter<StudentsListAdapter.MyViewHolder>{
     ArrayList<com.amlan.attendez.Firebase.Students_List> mList;
@@ -86,7 +80,6 @@ public class StudentsListAdapter extends RecyclerView.Adapter<StudentsListAdapte
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         public Activity mActivity;
-        //RealmResults<Students_List> mList;
         ArrayList<com.amlan.attendez.Firebase.Students_List> mList;
 
         public final TextView student_name;
@@ -200,49 +193,4 @@ public class StudentsListAdapter extends RecyclerView.Adapter<StudentsListAdapte
         }
     }
 }
-/*
-public class StudentsListAdapter extends RealmRecyclerViewAdapter<Students_List, ViewHolder_students> {
 
-    private final Activity mActivity;
-    RealmResults<Students_List> mList;
-    String stuID, mroomID;
-    Realm realm = Realm.getDefaultInstance();
-
-    public StudentsListAdapter(RealmResults<Students_List> list, Activity context, String roomID, String extraClick) {
-
-        super(context, list, true);
-
-        mActivity = context;
-        mList = list;
-        mroomID =roomID;
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder_students onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.student_attendance_adapter, parent, false);
-        return new ViewHolder_students(itemView, mActivity, mList, mroomID);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder_students holder, final int position) {
-        Students_List temp = getItem(position);
-        holder.student_name.setText(temp.getName_student());
-        holder.student_regNo.setText(temp.getRegNo_student());
-
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        stuID = temp.getRegNo_student();
-        String value = preferences.getString(stuID, null);
-        if (value==null){
-
-        }else {
-            if (value.equals("Present")) {
-                holder.radioButton_present.setChecked(true);
-            } else {
-                holder.radioButton_absent.setChecked(true);
-            }
-        }
-    }
-
-} */

@@ -24,8 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import io.realm.Realm;
-
 public class Reports_Detail_Activity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -36,13 +34,11 @@ public class Reports_Detail_Activity extends AppCompatActivity {
     DatabaseReference mDatabase;
     ArrayList<Attendance_Students_List> mList;
 
-    //Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports__detail);
-        //Realm.init(this);
-        //realm = Realm.getDefaultInstance();
+
 
         String room_ID = getIntent().getStringExtra("ID");
         String classname = getIntent().getStringExtra("class");
@@ -62,15 +58,9 @@ public class Reports_Detail_Activity extends AppCompatActivity {
         className.setText(classname);
 
         mList = new ArrayList<>();
-        /* RealmResults<Attendance_Students_List> list = realm.where(Attendance_Students_List.class)
-                            .equalTo("date_and_classID", room_ID)
-                            .sort("studentName", Sort.ASCENDING)
-                            .findAllAsync(); */
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new Reports_Detail_Adapter(Reports_Detail_Activity.this, mList, room_ID);
-        //mAdapter = new Reports_Detail_Adapter( list,Reports_Detail_Activity.this, room_ID);
         recyclerView.setAdapter(mAdapter);
 
         String userID = FirebaseAuth.getInstance().getUid();

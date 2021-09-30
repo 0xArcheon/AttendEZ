@@ -3,7 +3,6 @@ package com.amlan.attendez;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -11,14 +10,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.amlan.attendez.Adapter.ClassListAdapter;
 import com.amlan.attendez.Firebase.Class_Names;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -34,9 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
-
 public class ClassActivity extends AppCompatActivity {
 
     BottomAppBar bottomAppBar;
@@ -48,14 +39,11 @@ public class ClassActivity extends AppCompatActivity {
     DatabaseReference mDatabase;
     ArrayList<com.amlan.attendez.Firebase.Class_Names> mList;
 
-    //Realm realm;
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
-        // Realm.init(this);
         getWindow().setStatusBarColor(getResources().getColor(R.color.aqua));
         getWindow().setNavigationBarColor(getResources().getColor(R.color.aqua));
         getWindow().setEnterTransition(null);
@@ -111,29 +99,6 @@ public class ClassActivity extends AppCompatActivity {
 
             }
         });
-
-
-        /*
-        realm = Realm.getDefaultInstance();
-
-
-        RealmResults<Class_Names> results;
-
-        results = realm.where(Class_Names.class)
-                .findAll();
-
-        sample = findViewById(R.id.classes_sample);
-        recyclerView = findViewById(R.id.recyclerView_main);
-
-        recyclerView.setHasFixedSize(true);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
-
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
-
-        mAdapter = new ClassListAdapter(results, ClassActivity.this);
-        recyclerView.setAdapter(mAdapter);
-
-    } */
 
     }
 }
