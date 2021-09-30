@@ -457,19 +457,19 @@ public class ClassDetail_Activity extends AppCompatActivity {
         final RealmList<Attendance_Students_List> list = new RealmList<>();
         list.addAll(list_students); */
 
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        final String dateOnly = String.valueOf(calendar.get(Calendar.DATE));
-        @SuppressLint("SimpleDateFormat") final String monthOnly = new SimpleDateFormat("MMM").format(calendar.getTime());
-
-            Attendance_Reports attendance_reports = new Attendance_Reports();
-            attendance_reports.setClassId(room_ID);
+        try {
+            Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+            final String dateOnly = String.valueOf(calendar.get(Calendar.DATE));
+            @SuppressLint("SimpleDateFormat") final String monthOnly = new SimpleDateFormat("MMM").format(calendar.getTime());
+            Attendance_Reports attendance_reports = new Attendance_Reports(date, monthOnly, dateOnly, room_ID, date + room_ID, class_Name, subject_Name, list);
+            /*attendance_reports.setClassId(room_ID);
             attendance_reports.setAttendance_students_lists(list);
             attendance_reports.setDate(date);
             attendance_reports.setDateOnly(dateOnly);
             attendance_reports.setMonthOnly(monthOnly);
             attendance_reports.setDate_and_classID(date + room_ID);
             attendance_reports.setClassname(class_Name);
-            attendance_reports.setSubjName(subject_Name);
+            attendance_reports.setSubjName(subject_Name); */
             mDatabase.child("Attendance Reports").push().setValue(attendance_reports).addOnCompleteListener
                     (new OnCompleteListener<Void>() {
                         @Override
@@ -500,12 +500,13 @@ public class ClassDetail_Activity extends AppCompatActivity {
             editor.commit();
             Toast.makeText(ClassDetail_Activity.this, "Attendance Submitted", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
+        }
 
-        /* catch (Exception e) {
+         catch (Exception e) {
             e.printStackTrace();
             progressDialog.dismiss();
             Toast.makeText(ClassDetail_Activity.this, "Error Occurred", Toast.LENGTH_SHORT).show();
-        } */
+        }
 
 
     }

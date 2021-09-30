@@ -34,7 +34,7 @@ public class Reports_Detail_Activity extends AppCompatActivity {
     TextView subj, className, toolbar_title;
 
     DatabaseReference mDatabase;
-    ArrayList<Attendance_Students_List> list;
+    ArrayList<Attendance_Students_List> mList;
 
     //Realm realm;
     @Override
@@ -61,39 +61,39 @@ public class Reports_Detail_Activity extends AppCompatActivity {
         subj.setText(subjName);
         className.setText(classname);
 
-        list = new ArrayList<>();
-        String userID = FirebaseAuth.getInstance().getUid();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        Query query = mDatabase.child("Attendance Students List").orderByChild("date_and_classID").equalTo(room_ID);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                list.clear();
-                for(DataSnapshot ds : snapshot.getChildren())
-                {
-                    com.amlan.attendez.Firebase.Attendance_Students_List students_list = ds.getValue(com.amlan.attendez.Firebase.Attendance_Students_List.class);
-                    list.add(students_list);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                    mAdapter.notifyDataSetChanged();
-            }
-        });
-
-
+        mList = new ArrayList<>();
         /* RealmResults<Attendance_Students_List> list = realm.where(Attendance_Students_List.class)
                             .equalTo("date_and_classID", room_ID)
                             .sort("studentName", Sort.ASCENDING)
                             .findAllAsync(); */
 
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new Reports_Detail_Adapter(Reports_Detail_Activity.this, list, room_ID);
+        mAdapter = new Reports_Detail_Adapter(Reports_Detail_Activity.this, mList, room_ID);
         //mAdapter = new Reports_Detail_Adapter( list,Reports_Detail_Activity.this, room_ID);
         recyclerView.setAdapter(mAdapter);
+
+        String userID = FirebaseAuth.getInstance().getUid();
+        String datenClass = date+userID+classname;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Query query = mDatabase.child("Attendance Students List").orderByChild("date_and_classID").equalTo(room_ID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mList.clear();
+                for(DataSnapshot ds : snapshot.getChildren())
+                {
+                    Attendance_Students_List students_list = ds.getValue(Attendance_Students_List.class);
+                    mList.add(students_list);
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
     @Override

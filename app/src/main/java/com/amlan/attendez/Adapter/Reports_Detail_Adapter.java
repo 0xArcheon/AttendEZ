@@ -12,11 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amlan.attendez.Firebase.Attendance_Students_List;
 import com.amlan.attendez.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class Reports_Detail_Adapter extends RecyclerView.Adapter<Reports_Detail_Adapter.MyViewHolder> {
+public class Reports_Detail_Adapter extends RecyclerView.Adapter<Reports_Detail_Adapter.NewViewHolder> {
 
     private final Activity mActivity;
     ArrayList<com.amlan.attendez.Firebase.Attendance_Students_List> mList;
@@ -31,17 +36,17 @@ public class Reports_Detail_Adapter extends RecyclerView.Adapter<Reports_Detail_
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.report_detail_adapter_item, parent, false);
-        return new MyViewHolder(itemView, mActivity, mList, mroomID);
+        return new NewViewHolder(itemView, mActivity, mList, mroomID);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Attendance_Students_List temp = mList.get(position);
-        holder.namE.setText(temp.getStudentName());
-        holder.regNo.setText(temp.getStudentRegNo());
-        if (temp.getAttendance().equals("Present")){
+    public void onBindViewHolder(@NonNull NewViewHolder holder, int position) {
+        Attendance_Students_List aList = mList.get(position);
+        holder.namE.setText(aList.getStudentName());
+        holder.regNo.setText(aList.getStudentRegNo());
+        if (aList.getAttendance().equals("Present")){
             holder.status.setText("P");
             holder.circle.setCardBackgroundColor(mActivity.getResources().getColor(R.color.green_new));
         }else{
@@ -55,7 +60,7 @@ public class Reports_Detail_Adapter extends RecyclerView.Adapter<Reports_Detail_
         return mList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class NewViewHolder extends RecyclerView.ViewHolder{
         public TextView namE;
         public TextView regNo;
         public TextView status;
@@ -63,7 +68,7 @@ public class Reports_Detail_Adapter extends RecyclerView.Adapter<Reports_Detail_
         public Activity mActivity;
         ArrayList<com.amlan.attendez.Firebase.Attendance_Students_List> mList;
 
-        public MyViewHolder(@NonNull final View itemView, Activity MainActivity, ArrayList<Attendance_Students_List> list, String mroomID) {
+        public NewViewHolder(@NonNull final View itemView, Activity mActivity, ArrayList<Attendance_Students_List> list, String mroomID) {
             super(itemView);
 
             namE = itemView.findViewById(R.id.student_name_report_detail_adapter);
@@ -71,7 +76,6 @@ public class Reports_Detail_Adapter extends RecyclerView.Adapter<Reports_Detail_
             status = itemView.findViewById(R.id.status_report_detail_adapter);
             circle = itemView.findViewById(R.id.cardView_report_detail_adapter);
 
-            mActivity = MainActivity;
             mList = list;
 
         }

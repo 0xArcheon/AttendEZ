@@ -82,7 +82,6 @@ public class Reports_Activity extends AppCompatActivity {
 
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
-
         recyclerView.setLayoutManager(gridLayoutManager);
         mAdapter = new ReportsAdapter(Reports_Activity.this, results, room_ID);
         recyclerView.setAdapter(mAdapter);
